@@ -6,7 +6,7 @@ from datetime import datetime
 
 # defining our target
 if(len(sys.argv) == 2):
-    target = socket.gethostbyname(sys.argv[1]) 
+    target = socket.gethostbyname(sys.argv[1])
 else:
     print("Invalid amount of args")
     print("Syntax:./port-scanner.py 192.168.0.2")
@@ -24,13 +24,24 @@ try:
         socket.setdefaulttimeout(1)
         result = s.connect_ex((target,port))
         print(f"Checking port :: {port}")
-        
-        print(result)
 
         if(result==0):
             print(f"Port:: {port} is open")
+        elif(result==111):
+            print("Connection Refused By Host")
+            break
         s.close()
 
-except KeyBoardInterrupt:
+
+except KeyboardInterrupt:
     print("Exiting...")
     sys.exit()
+
+except socket.gaierror:
+    print("Hostname cannot be rosolved")
+    sys.exit()
+
+except socket.error():
+    print("server is down")
+    sys.exit()
+
